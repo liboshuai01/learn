@@ -6,11 +6,16 @@ import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
+import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * 模拟 Flink 的 NettyConnectionManager / NettyClient
+ */
 @Slf4j
 public class NettyClient {
+
     private final String host;
     private final int port;
     private final MiniInputGate inputGate;
@@ -25,18 +30,21 @@ public class NettyClient {
     public void start() {
         group = new NioEventLoopGroup();
         try {
-            ChannelFuture f = new Bootstrap()
-                    .group(group)
+            Bootstrap b = new Bootstrap();
+            b.group(group)
                     .channel(NioSocketChannel.class)
                     .option(ChannelOption.TCP_NODELAY, true)
-                    .handler(new ChannelInitializer<NioSocketChannel>() {
+                    .handler(new ChannelInitializer<SocketChannel>() {
                         @Override
-                        protected void initChannel(NioSocketChannel ch) throws Exception {
+                        protected void initChannel(SocketChannel ch) {
+                            // 客户端管线：解码 -> 编码 -> ClientHandler(持有 InputGate)
                             ch.pipeline().addLast(new NettyMessage.MessageDecoder());
                             ch.pipeline().addLast(new NettyMessage.MessageEncoder());
                             ch.pipeline().addLast(new NettyClientHandler(inputGate));
                         }
-                    }).connect(host, port).sync();
+                    });
+
+            b.connect(host, port).sync();
             log.info("=== MiniFlink Netty Client 已连接到 {}:{} ===", host, port);
             // 这里不阻塞等待 close，因为我们需要主线程去运行 Task
         } catch (InterruptedException e) {

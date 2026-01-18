@@ -7,8 +7,12 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * 对应 Flink 的 SystemProcessingTimeService。
+ * 使用 ScheduledThreadPoolExecutor 及其后台线程来触发定时任务。
+ */
 @Slf4j
-public class SystemProcessingTimeService implements ProcessingTimeService{
+public class SystemProcessingTimeService implements ProcessingTimeService {
 
     private final ScheduledExecutorService timerService;
 
@@ -29,6 +33,8 @@ public class SystemProcessingTimeService implements ProcessingTimeService{
     @Override
     public ScheduledFuture<?> registerTimer(long timestamp, ProcessingTimeCallback callback) {
         long delay = Math.max(0, timestamp - getCurrentProcessingTime());
+
+        // 提交到调度线程池
         return timerService.schedule(() -> {
             try {
                 callback.onProcessingTime(timestamp);

@@ -5,12 +5,16 @@ import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
+import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
-import io.netty.channel.socket.nio.NioSocketChannel;
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * 模拟 Flink 的 NettyServer
+ */
 @Slf4j
 public class NettyServer {
+
     private final int port;
     private EventLoopGroup bossGroup;
     private EventLoopGroup workerGroup;
@@ -26,17 +30,18 @@ public class NettyServer {
             ServerBootstrap b = new ServerBootstrap();
             b.group(bossGroup, workerGroup)
                     .channel(NioServerSocketChannel.class)
-                    .childHandler(
-                            new ChannelInitializer<NioSocketChannel>() {
-                                @Override
-                                protected void initChannel(NioSocketChannel ch) throws Exception {
-                                    ch.pipeline().addLast(new NettyMessage.MessageDecoder());
-                                    ch.pipeline().addLast(new NettyMessage.MessageEncoder());
-                                    ch.pipeline().addLast(new PartitionRequestServerHandler());
-                                }
-                            }
-                    ).option(ChannelOption.SO_BACKLOG, 128)
+                    .childHandler(new ChannelInitializer<SocketChannel>() {
+                        @Override
+                        protected void initChannel(SocketChannel ch) {
+                            // 添加编解码器和业务 Handler
+                            ch.pipeline().addLast(new NettyMessage.MessageDecoder());
+                            ch.pipeline().addLast(new NettyMessage.MessageEncoder());
+                            ch.pipeline().addLast(new PartitionRequestServerHandler());
+                        }
+                    })
+                    .option(ChannelOption.SO_BACKLOG, 128)
                     .childOption(ChannelOption.SO_KEEPALIVE, true);
+
             b.bind(port).sync();
             log.info("=== MiniFlink Netty Server 启动在端口 {} ===", port);
         } catch (InterruptedException e) {
@@ -45,11 +50,7 @@ public class NettyServer {
     }
 
     public void shutdown() {
-        if (bossGroup != null) {
-            bossGroup.shutdownGracefully();
-        }
-        if (workerGroup != null) {
-            workerGroup.shutdownGracefully();
-        }
+        if (bossGroup != null) bossGroup.shutdownGracefully();
+        if (workerGroup != null) workerGroup.shutdownGracefully();
     }
 }

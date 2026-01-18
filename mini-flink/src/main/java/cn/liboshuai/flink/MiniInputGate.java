@@ -1,10 +1,17 @@
 package cn.liboshuai.flink;
 
+import lombok.extern.slf4j.Slf4j;
+
 import java.util.ArrayDeque;
 import java.util.Queue;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.locks.ReentrantLock;
 
+/**
+ * 对应 Flink 源码中的 InputGate。
+ * 修改：接收 NetworkBuffer 而不是 String。
+ */
+@Slf4j
 public class MiniInputGate {
 
     private final Queue<NetworkBuffer> queue = new ArrayDeque<>();
@@ -14,7 +21,7 @@ public class MiniInputGate {
     private CompletableFuture<Void> availabilityFuture = new CompletableFuture<>();
 
     /**
-     * [Netty 线程调用] 接受网络层传来的 Buffer
+     * [Netty 线程调用] 接收网络层传来的 Buffer
      * 对应 Flink 中的 RemoteInputChannel.onBuffer() -> InputGate.notifyChannelNonEmpty()
      */
     public void onBuffer(NetworkBuffer buffer) {
@@ -38,7 +45,7 @@ public class MiniInputGate {
         try {
             NetworkBuffer buffer = queue.poll();
             if (queue.isEmpty()) {
-                // 队列空了，重置 future，表示“目前不可用”
+                // 队列空了，重置 future，表示"目前不可用"
                 if (availabilityFuture.isDone()) {
                     availabilityFuture = new CompletableFuture<>();
                 }
@@ -52,7 +59,7 @@ public class MiniInputGate {
     /**
      * [Task 线程调用] 获取可用性 Future
      */
-    public CompletableFuture<Void> getAvailabilityFuture() {
+    public CompletableFuture<Void> getAvailableFuture() {
         lock.lock();
         try {
             return availabilityFuture;
