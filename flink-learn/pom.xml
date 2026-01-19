@@ -9,12 +9,20 @@
         <version>0.1.0-SNAPSHOT</version>
     </parent>
 
-    <groupId>cn.liboshuai.demo.blog</groupId>
-    <artifactId>blog-tool</artifactId>
+    <groupId>cn.liboshuai.flink</groupId>
+    <artifactId>flink-learn</artifactId>
+    <packaging>pom</packaging>
+
+    <modules>
+        <module>flink-rpc</module>
+        <module>flink-wordcount</module>
+        <module>flink-mini</module>
+        <module>flink-spi</module>
+    </modules>
 
     <properties>
-        <maven.compiler.source>17</maven.compiler.source>
-        <maven.compiler.target>17</maven.compiler.target>
+        <maven.compiler.source>8</maven.compiler.source>
+        <maven.compiler.target>8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 

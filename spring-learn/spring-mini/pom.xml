@@ -1,16 +1,18 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>cn.liboshuai.demo</groupId>
+        <artifactId>spring-learn</artifactId>
+        <version>0.1.0-SNAPSHOT</version>
+    </parent>
 
-    <groupId>cn.liboshuai.demo</groupId>
-    <artifactId>lbs-demo</artifactId>
-    <version>0.1.0-SNAPSHOT</version>
+    <artifactId>spring-mini</artifactId>
     <packaging>pom</packaging>
 
     <modules>
-        <module>spring-learn</module>
-        <module>java-learn</module>
-        <module>blog-tool</module>
-        <module>flink-learn</module>
+        <module>spring-mini-context</module>
+        <module>spring-mini-example</module>
     </modules>
+
 </project>
