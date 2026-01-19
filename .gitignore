@@ -6,11 +6,12 @@ target/
 
 ### IntelliJ IDEA ###
 .idea/*
+!.idea/misc.xml
 !.idea/vcs.xml
+!.idea/encodings.xml
 !.idea/icon.png
 !.idea/bookmarks.json
 !.idea/code-remark.xml
-!.idea/GitCommitMessageStorage.xml
 *.iws
 *.iml
 *.ipr
