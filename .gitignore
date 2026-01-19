@@ -2,9 +2,15 @@ target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
+.kotlin
 
 ### IntelliJ IDEA ###
-.idea
+.idea/*
+!.idea/vcs.xml
+!.idea/icon.png
+!.idea/bookmarks.json
+!.idea/code-remark.xml
+!.idea/GitCommitMessageStorage.xml
 *.iws
 *.iml
 *.ipr
