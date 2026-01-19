@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@MapperScan({"cn.liboshuai.learn.springboot.mybatisplus.dynamic.mapper"})
+@MapperScan({"cn.liboshuai.learn.springboot.mybatisplus"})
 public class MybatisPlusConfig {
 
     /**
