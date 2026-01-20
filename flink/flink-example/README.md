@@ -52,13 +52,13 @@ nc -lk 9999
 
 **使用默认参数 (`localhost:9999`)**
 ```bash
-flink run -c cn.liboshuai.learn.flink.example.FlinkWordCountDemo target/your-project-name.jar
+flink run -c cn.liboshuai.learn.flink.example.WordCount target/your-project-name.jar
 ```
-> **注意**: 请将 `cn.liboshuai.learn.flink.example.FlinkWordCountDemo` 替换为你的主类全路径名，`your-project-name.jar` 替换为实际的 JAR 文件名。
+> **注意**: 请将 `cn.liboshuai.learn.flink.example.WordCount` 替换为你的主类全路径名，`your-project-name.jar` 替换为实际的 JAR 文件名。
 
 **指定自定义参数**
 ```bash
-flink run -c cn.liboshuai.learn.flink.example.FlinkWordCountDemo target/your-project-name.jar --hostname 192.168.1.100 --port 12345
+flink run -c cn.liboshuai.learn.flink.example.WordCount target/your-project-name.jar --hostname 192.168.1.100 --port 12345
 ```
 
 ### 5. 输入数据并查看结果

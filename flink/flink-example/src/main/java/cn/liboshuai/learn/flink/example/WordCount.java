@@ -16,9 +16,9 @@ import org.slf4j.LoggerFactory;
 /**
  * Flink 单词计数示例
  */
-public class FlinkWordCountDemo {
+public class WordCount {
 
-    private static final Logger LOG = LoggerFactory.getLogger(FlinkWordCountDemo.class);
+    private static final Logger LOG = LoggerFactory.getLogger(WordCount.class);
 
     // 定义参数键
     private static final String KEY_HOSTNAME = "hostname";
